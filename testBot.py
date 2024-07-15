@@ -1,8 +1,21 @@
-from telegram import Update,ReplyKeyboardRemove,ReplyKeyboardMarkup,InlineKeyboardMarkup,InlineKeyboardButton
 from typing import Final
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler,CallbackQueryHandler
 
-
+from telegram import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    ReplyKeyboardMarkup,
+    ReplyKeyboardRemove,
+    Update,
+)
+from telegram.ext import (
+    Application,
+    CallbackQueryHandler,
+    CommandHandler,
+    ContextTypes,
+    ConversationHandler,
+    MessageHandler,
+    filters,
+)
 
 TOKEN: Final = ''
 BOT_USERNAME: Final = '@TTT3st_bot'
@@ -29,7 +42,6 @@ async def start_conversation_command(update: Update, context: ContextTypes.DEFAU
     return GENDER
 
 async def gender(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    user = update.message.from_user
     await update.message.reply_text(
         "Can i see your photo? "
         "or send /skip if you don't want to.",
@@ -39,8 +51,6 @@ async def gender(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return PHOTO
 
 async def photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    user = update.message.from_user
-    photo_file = await update.message.photo[-1].get_file()
     await update.message.reply_text(
         "You looks amazing. May I know yout age , or send /skip if you don't want to."
     )
@@ -48,7 +58,6 @@ async def photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return AGE
 
 async def skip_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    user = update.message.from_user
     await update.message.reply_text(
         "I am sure you looks great.May I know your age., or send /skip."
     )
@@ -56,14 +65,12 @@ async def skip_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return AGE
 
 async def age(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    user = update.message.from_user
-    age = update.message.text
     try:
         processedAge = int(update.message.text)
     except ValueError:
         await update.message.reply_text("Sorry, that is not a number.")
         return AGE
-    
+
     if processedAge < 18:
         await update.message.reply_text("You are Young.")
     elif processedAge < 30:
@@ -74,7 +81,6 @@ async def age(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return BIO
 
 async def bio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    user = update.message.from_user
     await update.message.reply_text("Wow, Thanks for sharing.")
 
     return ConversationHandler.END
@@ -109,9 +115,9 @@ async def rate_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await query.message.reply_text(
             "Thank you! I'm glad you liked it."
         )
-    
 
- 
+
+
 async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
     first_name = update.message.from_user.first_name
@@ -167,5 +173,5 @@ if __name__ == '__main__':
     print('polling... ')
     app.run_polling(poll_interval=3)
 
-    
+
 
